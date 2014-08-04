@@ -110,9 +110,14 @@ class GeneratorBmcOutput(object):
 
 
     def isAssertForAll(self, _predicateAssertion):
-        matchForAll = re.search(r'(__e_acsl_forall_)', _predicateAssertion)
+        #print(_predicateAssertion)
+        matchForAll = re.search(r'(e_acsl_forall)', _predicateAssertion)
         if matchForAll:
+            #print("YES")
             return True
+        else:
+            #print("NO")
+            return False
 
 
     def identifyEacslAssert(self, _linesprogram, index):
@@ -124,7 +129,7 @@ class GeneratorBmcOutput(object):
         #   4st type of assertion (RTE, PRE, POST)
         #   5st is a forall assertion
         #   6st the number of the line
-        result_control = [False,False,"","",False]
+        result_control = [False,False,"","",False,0]
         matchFunctAssert = re.search(r'e_acsl_assert\((.*)', _linesprogram[index])
         if matchFunctAssert:
             isForAll = False
@@ -133,30 +138,34 @@ class GeneratorBmcOutput(object):
             get_control_elem = matchFunctAssert.group(1).split(",")
             typeassert = self.identifyTypeACSLAssert(get_control_elem[1])
 
+            #print(index)
             if self.isAssertForAll(get_control_elem[0]):
                 isForAll = True
                 result_control[4] = True
+
 
             if not isForAll:
                 newline = get_control_elem[0]
 
             # getting the number of the line in the e-acsl asertion
             flag_getnumline = True
-
+            linenumassert = 0
             while flag_getnumline:
-                print(">>>>", _linesprogram[index])
+                #print(">>>>", _linesprogram[index])
                 #,[ ]*([0-9]*);$
                 #,0);
                 matchEndAssertion = re.search(r'([0-9]*)\);$', _linesprogram[index])
                 if matchEndAssertion:
                     flag_getnumline = False
-                    print("MATCH:",matchEndAssertion.group(1))
+                    #print("MATCH:",matchEndAssertion.group(1))
+                    linenumassert = matchEndAssertion.group(1).strip()
                 index += 1
 
             result_control[0] = True
             result_control[1] = not isForAll
             result_control[2] = newline
             result_control[3] = typeassert
+            result_control[5] = linenumassert
 
         return result_control
 
@@ -179,28 +188,38 @@ class GeneratorBmcOutput(object):
     def createBmcOutput(self):
 
         self.generateDataFunct(self.cprogramfile)
+        list_newcodetobmc = []
+        listposadded_forall = []
 
         """
         Write the new instance of the analyzed C source code
         """
+
+        #TODO: adding this header in the end of the generation
         # Check the includes and then write the nedded C headers to FORTES
-        if not self.flag_assert:
-            print("#include <assert.h> /** by INCEPTION **/")
-        if not self.flag_stdint:
-            print("#include <stdint.h> /** by INCEPTION **/")
-        if not self.flag_stdio:
-            print("#include <stdio.h> /** by INCEPTION **/")
-        if not self.flag_stdlib:
-            print("#include <stdlib.h> /** by INCEPTION **/")
+        # if not self.flag_assert:
+        #     #list_newcodetobmc.append("#include <assert.h> /** by INCEPTION **/ \n")
+        #     print("#include <assert.h> /** by INCEPTION **/")
+        # #if not self.flag_stdint:
+        # #    print("#include <stdint.h> /** by INCEPTION **/")
+        # if not self.flag_stdio:
+        #     #list_newcodetobmc.append("#include <stdio.h> /** by INCEPTION **/ \n")
+        #     print("#include <stdio.h> /** by INCEPTION **/")
+        #if not self.flag_stdlib:
+        #    print("#include <stdlib.h> /** by INCEPTION **/")
 
         
-        if self.flag_others_h:
-            for header in self.header_others:
-                print(header.rstrip())
+        # if self.flag_others_h:
+        #     for header in self.header_others:
+        #         #list_newcodetobmc.append(header.rstrip())
+        #         print(header.rstrip())
 
         # Adding ASSERT macro
-        print("#define bmc_check(predicate,line)   if(!(predicate)){ "\
-              "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); }")
+        # list_newcodetobmc.append(
+        #     "#define BMC_CHECK(predicate,line)   if(!(predicate)){ "
+        #     "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); } \n"
+        # )
+
 
 
         index = 0
@@ -211,6 +230,7 @@ class GeneratorBmcOutput(object):
             linenum = (index+1)
 
             control_list = self.isNumLineBeginFunct(linenum)
+
             # Print the functions lines in the code
             if control_list[0] :
                 # Run the functions line to identify E-ACSL functions
@@ -219,26 +239,76 @@ class GeneratorBmcOutput(object):
                     #listAssertcontrol = self.identifyEacslAssert(list_cfile_lines[index])
                     listAssertcontrol = self.identifyEacslAssert(list_cfile_lines,index)
 
+                    #list_newcodetobmc.append(str(index)+" << in FUNC \n")
+
                     # We have an assertion
                     if listAssertcontrol[0]:
                         # We have a new assertion to add
                         if listAssertcontrol[1]:
-                            # TODO: o print deve ser feito de acordo com o tipo da assert
                             #print("assert( "+listAssertcontrol[2]+" );")
-                            print("bmc_check( "+listAssertcontrol[2]+", "+listAssertcontrol[2]+");")
+                            list_newcodetobmc.append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
+                            #print("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+");")
+
                         # Check if we have a forall assertion
                         elif listAssertcontrol[3]:
-                            print("FORALL -- DOING")
-                    print(list_cfile_lines[index],end="")
+                            # generating assert to forall
+                            # From FORALL assertion running the code to bottom-up to find "if(predicate)" x2 and stop
+                            # in the while(1)
+
+                            counttostopwhile = 0
+                            # Cuz we run in partial and new code that has been generated
+                            actualposinnewcode = len(list_newcodetobmc) - 1
+                            actualposinnewcode -= 1 # before FORALL
+
+                            while counttostopwhile < 2:
+
+                                matchIfsInForAll = re.search(r'if[ ]*\((.*)\)', list_newcodetobmc[actualposinnewcode])
+                                if matchIfsInForAll:
+                                    #listposadded_forall.append(actualpos)
+                                    counttostopwhile += 1
+                                    # TODO: generate assertion to new code
+                                    # identifying if the list of new code was modified
+                                    # Question: Does the actualpos is less than
+                                    #           all elements in the listposadded_forall?
+                                    # pos2addinlist = actualpos
+                                    # for elemt in listposadded_forall:
+                                    #     if actualpos >= elemt:
+                                    #         pos2addinlist = actualpos + len(listposadded_forall)
+                                    #         break
+                                    #list_newcodetobmc.append("if in: "+str(actualpos)+"-> "+list_cfile_lines[actualpos]+"\n")
+
+                                    list_newcodetobmc.insert(actualposinnewcode, "BMC_CHECK( "+matchIfsInForAll.group(1)+" , "+
+                                                             listAssertcontrol[5]+"); \n")
+
+                                    #list_newcodetobmc.insert(pos2addinlist, "NEW FOR ALL \n")
+                                    #list_newcodetobmc.insert(actualpos, "NEW FOR ALL \n")
+                                    #print(matchIfsInForAll.group(1),"    ::   ", listAssertcontrol[5])
+                                actualposinnewcode -= 1
+
+                            # Como inserir os elemts na lista sem perder a proxima referencia
+                            #print(listposadded_forall)
+                            #list_newcodetobmc.append("//FORALL -- DOING \n")
+                            #print("//FORALL -- DOING")
+
+
+                    #list_newcodetobmc.append(str(index)+" << in FUNC "+list_cfile_lines[index])
+                    list_newcodetobmc.append(list_cfile_lines[index])
+                    #print(list_cfile_lines[index],end="")
                     index += 1
 
 
             # Print lines of code outside of the functions
             if index < sizelistlines:
-                print(list_cfile_lines[index],end="")
-            index += 1
+                #list_newcodetobmc.append(str(index)+" << GLOBAL \n")
+                #list_newcodetobmc.append(str(index)+" << GLOBAL "+list_cfile_lines[index])
+                list_newcodetobmc.append(list_cfile_lines[index])
+                #print(list_cfile_lines[index],end="")
+                index += 1 # BUG
 
 
+        # Print the new code
+        for index, line in enumerate(list_newcodetobmc):
+            print(line,end="")
                             
         
 

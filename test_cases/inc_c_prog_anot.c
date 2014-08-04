@@ -92,6 +92,7 @@ void check_range(int range, int *vet)
   i = 0;
   while (i < 10) {
     /*@ assert i < range_updated; */
+BMC_CHECK( i < range_updated, 13); 
     e_acsl_assert(i < range_updated,(char *)"Assertion",
                   (char *)"check_range",(char *)"i < range_updated",13);
     *(vet + i) = 1 * var_a;
@@ -114,6 +115,7 @@ void __e_acsl_check_range(int range, int *vet)
 
 int handle_buffer(void)
 {
+  int __e_acsl_at_6;
   int __e_acsl_at_5;
   int __e_acsl_at_4;
   int __e_acsl_at_3;
@@ -128,23 +130,31 @@ int handle_buffer(void)
   {
     int __e_acsl_forall;
     int __e_acsl_i;
+BMC_CHECK( i < 10, 27); 
     e_acsl_assert(i < 10,(char *)"RTE",(char *)"handle_buffer",
                   (char *)"index_bound: i < 10",27);
+BMC_CHECK( 0 <= i, 27); 
     e_acsl_assert(0 <= i,(char *)"RTE",(char *)"handle_buffer",
                   (char *)"index_bound: 0 <= i",27);
+BMC_CHECK( i == buffer[i], 27); 
     e_acsl_assert(i == buffer[i],(char *)"Precondition",
                   (char *)"handle_buffer",(char *)"i == buffer[i]",27);
+BMC_CHECK( buffer == (void *)0, 28); 
     e_acsl_assert(buffer == (void *)0,(char *)"Precondition",
                   (char *)"handle_buffer",(char *)"(int *)buffer == \\null",
                   28);
     __e_acsl_forall = 1;
     __e_acsl_i = 0;
     while (1) {
+BMC_CHECK( __e_acsl_i <= 9 , 29); 
       if (__e_acsl_i <= 9) ; else break;
+BMC_CHECK( __e_acsl_i < 10, 29); 
       e_acsl_assert(__e_acsl_i < 10,(char *)"RTE",(char *)"handle_buffer",
                     (char *)"index_bound: __e_acsl_i < 10",29);
+BMC_CHECK( 0 <= __e_acsl_i, 29); 
       e_acsl_assert(0 <= __e_acsl_i,(char *)"RTE",(char *)"handle_buffer",
                     (char *)"index_bound: 0 <= __e_acsl_i",29);
+BMC_CHECK( buffer[__e_acsl_i] == 0 , 29); 
       if (buffer[__e_acsl_i] == 0) ;
       else {
         __e_acsl_forall = 0;
@@ -157,125 +167,175 @@ int handle_buffer(void)
                   (char *)"handle_buffer",
                   (char *)"\\forall int i; 0 <= i && i <= 9 ==> buffer[i] == 0",
                   29);
-    __e_acsl_at_5 = __e_acsl_i_4; //PQ isto foi gerado???
-    __e_acsl_at_4 = i;
+    __e_acsl_at_6 = i;
+BMC_CHECK( (long long)i - (long long)1 < (long long)10, 48); 
     e_acsl_assert((long long)i - (long long)1 < (long long)10,(char *)"RTE",
                   (char *)"handle_buffer",
                   (char *)"index_bound: (long long)((long long)i-(long long)1) < 10",
-                  41);
+                  48);
+BMC_CHECK( 0LL <= (long long)i - (long long)1, 48); 
     e_acsl_assert(0LL <= (long long)i - (long long)1,(char *)"RTE",
                   (char *)"handle_buffer",
                   (char *)"index_bound: 0 <= (long long)((long long)i-(long long)1)",
-                  41);
-    __e_acsl_at_3 = buffer[(long long)i - (long long)1];
+                  48);
+    __e_acsl_at_5 = buffer[(long long)i - (long long)1];
+    __e_acsl_at_4 = i;
+    __e_acsl_at_3 = i;
     __e_acsl_at_2 = i;
     __e_acsl_at = i;
     i = 0;
   }
   {
     int __e_acsl_forall_2;
-    int __e_acsl_i_2;
+    int __e_acsl_k;
+    int __e_acsl_forall_3;
+    int __e_acsl_j;
     __e_acsl_forall_2 = 1;
-    __e_acsl_i_2 = 0;
+    __e_acsl_k = 0;
     while (1) {
-      if (__e_acsl_i_2 <= 9) ; else break;
-      e_acsl_assert(__e_acsl_i_2 < 10,(char *)"RTE",(char *)"handle_buffer",
-                    (char *)"index_bound: __e_acsl_i_2 < 10",34);
-      e_acsl_assert(0 <= __e_acsl_i_2,(char *)"RTE",(char *)"handle_buffer",
-                    (char *)"index_bound: 0 <= __e_acsl_i_2",34);
-      if (buffer[__e_acsl_i_2] == __e_acsl_i_2) ;
+BMC_CHECK( __e_acsl_k <= 9 , 39); 
+      if (__e_acsl_k <= 9) ; else break;
+BMC_CHECK( __e_acsl_k < 10, 39); 
+      e_acsl_assert(__e_acsl_k < 10,(char *)"RTE",(char *)"handle_buffer",
+                    (char *)"index_bound: __e_acsl_k < 10",39);
+BMC_CHECK( 0 <= __e_acsl_k, 39); 
+      e_acsl_assert(0 <= __e_acsl_k,(char *)"RTE",(char *)"handle_buffer",
+                    (char *)"index_bound: 0 <= __e_acsl_k",39);
+BMC_CHECK( buffer[__e_acsl_k] != __e_acsl_at , 39); 
+      if (buffer[__e_acsl_k] != __e_acsl_at) ;
       else {
         __e_acsl_forall_2 = 0;
         goto e_acsl_end_loop2;
       }
-      __e_acsl_i_2 ++;
+      __e_acsl_k ++;
     }
     e_acsl_end_loop2: ;
-    e_acsl_assert(__e_acsl_forall_2,(char *)"Invariant",
+    e_acsl_assert(! __e_acsl_forall_2,(char *)"Invariant",
                   (char *)"handle_buffer",
-                  (char *)"\\forall int i; 0 <= i && i <= 9 ==> buffer[i] == i",
-                  34);
-    /*@ loop invariant ∀ int i; 0 ≤ i ∧ i ≤ 9 ⇒ buffer[i] ≡ i; */
+                  (char *)"!(\\forall int k; 0 <= k && k <= 9 ==> buffer[k] != \\at(i,Pre))",
+                  39);
+    __e_acsl_forall_3 = 1;
+    __e_acsl_j = 0;
+    while (1) {
+BMC_CHECK( __e_acsl_j <= 9 , 38); 
+      if (__e_acsl_j <= 9) ; else break;
+BMC_CHECK( __e_acsl_j < 10, 38); 
+      e_acsl_assert(__e_acsl_j < 10,(char *)"RTE",(char *)"handle_buffer",
+                    (char *)"index_bound: __e_acsl_j < 10",38);
+BMC_CHECK( 0 <= __e_acsl_j, 38); 
+      e_acsl_assert(0 <= __e_acsl_j,(char *)"RTE",(char *)"handle_buffer",
+                    (char *)"index_bound: 0 <= __e_acsl_j",38);
+BMC_CHECK( buffer[__e_acsl_j] == i , 38); 
+      if (buffer[__e_acsl_j] == i) ;
+      else {
+        __e_acsl_forall_3 = 0;
+        goto e_acsl_end_loop3;
+      }
+      __e_acsl_j ++;
+    }
+    e_acsl_end_loop3: ;
+    e_acsl_assert(__e_acsl_forall_3,(char *)"Invariant",
+                  (char *)"handle_buffer",
+                  (char *)"\\forall int j; 0 <= j && j <= 9 ==> buffer[j] == i",
+                  38);
+    /*@ loop invariant ∀ int j; 0 ≤ j ∧ j ≤ 9 ⇒ buffer[j] ≡ i;
+        loop invariant
+          ¬(∀ int k; 0 ≤ k ∧ k ≤ 9 ⇒ buffer[k] ≢ \at(i,Pre));
+    */
     while (i <= range_updated) {
       buffer[i] = i;
       {
-        int __e_acsl_forall_3;
-        int __e_acsl_i_3;
+        int __e_acsl_forall_4;
+        int __e_acsl_j_2;
+        int __e_acsl_forall_5;
+        int __e_acsl_k_2;
         i ++;
-        __e_acsl_forall_3 = 1;
-        __e_acsl_i_3 = 0;
+        __e_acsl_forall_4 = 1;
+        __e_acsl_j_2 = 0;
         while (1) {
-          if (__e_acsl_i_3 <= 9) ; else break;
-          e_acsl_assert(__e_acsl_i_3 < 10,(char *)"RTE",
+BMC_CHECK( __e_acsl_j_2 <= 9 , 38); 
+          if (__e_acsl_j_2 <= 9) ; else break;
+BMC_CHECK( __e_acsl_j_2 < 10, 38); 
+          e_acsl_assert(__e_acsl_j_2 < 10,(char *)"RTE",
                         (char *)"handle_buffer",
-                        (char *)"index_bound: __e_acsl_i_3 < 10",34);
-          e_acsl_assert(0 <= __e_acsl_i_3,(char *)"RTE",
+                        (char *)"index_bound: __e_acsl_j_2 < 10",38);
+BMC_CHECK( 0 <= __e_acsl_j_2, 38); 
+          e_acsl_assert(0 <= __e_acsl_j_2,(char *)"RTE",
                         (char *)"handle_buffer",
-                        (char *)"index_bound: 0 <= __e_acsl_i_3",34);
-          if (buffer[__e_acsl_i_3] == __e_acsl_i_3) ;
+                        (char *)"index_bound: 0 <= __e_acsl_j_2",38);
+BMC_CHECK( buffer[__e_acsl_j_2] == i , 38); 
+          if (buffer[__e_acsl_j_2] == i) ;
           else {
-            __e_acsl_forall_3 = 0;
-            goto e_acsl_end_loop3;
+            __e_acsl_forall_4 = 0;
+            goto e_acsl_end_loop4;
           }
-          __e_acsl_i_3 ++;
+          __e_acsl_j_2 ++;
         }
-        e_acsl_end_loop3: ;
-        e_acsl_assert(__e_acsl_forall_3,(char *)"Invariant",
+        e_acsl_end_loop4: ;
+        e_acsl_assert(__e_acsl_forall_4,(char *)"Invariant",
                       (char *)"handle_buffer",
-                      (char *)"\\forall int i; 0 <= i && i <= 9 ==> buffer[i] == i",
-                      34);
+                      (char *)"\\forall int j; 0 <= j && j <= 9 ==> buffer[j] == i",
+                      38);
+        __e_acsl_forall_5 = 1;
+        __e_acsl_k_2 = 0;
+        while (1) {
+BMC_CHECK( __e_acsl_k_2 <= 9 , 39); 
+          if (__e_acsl_k_2 <= 9) ; else break;
+BMC_CHECK( __e_acsl_k_2 < 10, 39); 
+          e_acsl_assert(__e_acsl_k_2 < 10,(char *)"RTE",
+                        (char *)"handle_buffer",
+                        (char *)"index_bound: __e_acsl_k_2 < 10",39);
+BMC_CHECK( 0 <= __e_acsl_k_2, 39); 
+          e_acsl_assert(0 <= __e_acsl_k_2,(char *)"RTE",
+                        (char *)"handle_buffer",
+                        (char *)"index_bound: 0 <= __e_acsl_k_2",39);
+BMC_CHECK( buffer[__e_acsl_k_2] != __e_acsl_at_2 , 39); 
+          if (buffer[__e_acsl_k_2] != __e_acsl_at_2) ;
+          else {
+            __e_acsl_forall_5 = 0;
+            goto e_acsl_end_loop5;
+          }
+          __e_acsl_k_2 ++;
+        }
+        e_acsl_end_loop5: ;
+        e_acsl_assert(! __e_acsl_forall_5,(char *)"Invariant",
+                      (char *)"handle_buffer",
+                      (char *)"!(\\forall int k; 0 <= k && k <= 9 ==> buffer[k] != \\at(i,Pre))",
+                      39);
       }
     }
   }
   /*@ assert i ≡ 9; */
+BMC_CHECK( i == 9, 46); 
   e_acsl_assert(i == 9,(char *)"Assertion",(char *)"handle_buffer",
-                (char *)"i == 9",39);
+                (char *)"i == 9",46);
   /*@ assert \at(i,Pre) ≡ buffer[\at(i,Pre)]; */
-  e_acsl_assert(__e_acsl_at_2 < 10,(char *)"RTE",(char *)"handle_buffer",
-                (char *)"index_bound: __e_acsl_at_2 < 10",0);
-  e_acsl_assert(0 <= __e_acsl_at_2,(char *)"RTE",(char *)"handle_buffer",
-                (char *)"index_bound: 0 <= __e_acsl_at_2",0);
-  e_acsl_assert(__e_acsl_at == buffer[__e_acsl_at_2],(char *)"Assertion",
-                (char *)"handle_buffer",
-                (char *)"\\at(i,Pre) == buffer[\\at(i,Pre)]",40);
-  /*@ assert \at(buffer[\at(i,Here)-1],Pre) ≡ buffer[\at(i,Pre)]; */
+BMC_CHECK( __e_acsl_at_4 < 10, 0); 
   e_acsl_assert(__e_acsl_at_4 < 10,(char *)"RTE",(char *)"handle_buffer",
                 (char *)"index_bound: __e_acsl_at_4 < 10",0);
+BMC_CHECK( 0 <= __e_acsl_at_4, 0); 
   e_acsl_assert(0 <= __e_acsl_at_4,(char *)"RTE",(char *)"handle_buffer",
                 (char *)"index_bound: 0 <= __e_acsl_at_4",0);
+BMC_CHECK( __e_acsl_at_3 == buffer[__e_acsl_at_4], 47); 
   e_acsl_assert(__e_acsl_at_3 == buffer[__e_acsl_at_4],(char *)"Assertion",
                 (char *)"handle_buffer",
+                (char *)"\\at(i,Pre) == buffer[\\at(i,Pre)]",47);
+  /*@ assert \at(buffer[\at(i,Here)-1],Pre) ≡ buffer[\at(i,Pre)]; */
+BMC_CHECK( __e_acsl_at_6 < 10, 0); 
+  e_acsl_assert(__e_acsl_at_6 < 10,(char *)"RTE",(char *)"handle_buffer",
+                (char *)"index_bound: __e_acsl_at_6 < 10",0);
+BMC_CHECK( 0 <= __e_acsl_at_6, 0); 
+  e_acsl_assert(0 <= __e_acsl_at_6,(char *)"RTE",(char *)"handle_buffer",
+                (char *)"index_bound: 0 <= __e_acsl_at_6",0);
+BMC_CHECK( __e_acsl_at_5 == buffer[__e_acsl_at_6], 48); 
+  e_acsl_assert(__e_acsl_at_5 == buffer[__e_acsl_at_6],(char *)"Assertion",
+                (char *)"handle_buffer",
                 (char *)"\\at(buffer[\\at(i,Here)-1],Pre) == buffer[\\at(i,Pre)]",
-                41);
-  /*@ assert ¬(∀ int i; 0 ≤ i ∧ i ≤ 9 ⇒ buffer[i] ≢ \at(i,Pre));
-  */
-  {
-    int __e_acsl_forall_4;
-    int __e_acsl_i_4;
-    __e_acsl_forall_4 = 1;
-    __e_acsl_i_4 = 0;
-    while (1) {
-      if (__e_acsl_i_4 <= 9) ; else break;
-      e_acsl_assert(__e_acsl_i_4 < 10,(char *)"RTE",(char *)"handle_buffer",
-                    (char *)"index_bound: __e_acsl_i_4 < 10",42);
-      e_acsl_assert(0 <= __e_acsl_i_4,(char *)"RTE",(char *)"handle_buffer",
-                    (char *)"index_bound: 0 <= __e_acsl_i_4",42);
-      if (buffer[__e_acsl_i_4] != __e_acsl_at_5) ;
-      else {
-        __e_acsl_forall_4 = 0;
-        goto e_acsl_end_loop4;
-      }
-      __e_acsl_i_4 ++;
-    }
-    e_acsl_end_loop4: ;
-    e_acsl_assert(! __e_acsl_forall_4,(char *)"Assertion",
-                  (char *)"handle_buffer",
-                  (char *)"!(\\forall int i; 0 <= i && i <= 9 ==> buffer[i] != \\at(i,Pre))",
-                  42);
-  }
+                48);
   /*@ assert \false; */
+BMC_CHECK( 0, 51); 
   e_acsl_assert(0,(char *)"Assertion",(char *)"handle_buffer",
-                (char *)"\\false",44);
+                (char *)"\\false",51);
   __retres = 0;
   return __retres;
 }
