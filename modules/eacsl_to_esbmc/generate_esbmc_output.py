@@ -2,7 +2,7 @@
 from __future__ import print_function
 # -*- coding: latin1 -*-
 from decorator import getfullargspec
-from tables.tests.test_tables import getColRangeTestCase
+
 
 __author__ = 'Herbert OLiveira Rocha'
 
@@ -115,16 +115,17 @@ class GeneratorBmcOutput(object):
             return True
 
 
-    def identifyEacslAssert(self, _lineprogram):
+    def identifyEacslAssert(self, _linesprogram, index):
 
         # result_control[]:
         #   1st Identified a assert
         #   2st has a new line
-        #   3st the new line
+        #   3st the new txt line
         #   4st type of assertion (RTE, PRE, POST)
         #   5st is a forall assertion
+        #   6st the number of the line
         result_control = [False,False,"","",False]
-        matchFunctAssert = re.search(r'e_acsl_assert\((.*)', _lineprogram)
+        matchFunctAssert = re.search(r'e_acsl_assert\((.*)', _linesprogram[index])
         if matchFunctAssert:
             isForAll = False
             newline = ""
@@ -136,9 +137,21 @@ class GeneratorBmcOutput(object):
                 isForAll = True
                 result_control[4] = True
 
-
             if not isForAll:
                 newline = get_control_elem[0]
+
+            # getting the number of the line in the e-acsl asertion
+            flag_getnumline = True
+
+            while flag_getnumline:
+                print(">>>>", _linesprogram[index])
+                #,[ ]*([0-9]*);$
+                #,0);
+                matchEndAssertion = re.search(r'([0-9]*)\);$', _linesprogram[index])
+                if matchEndAssertion:
+                    flag_getnumline = False
+                    print("MATCH:",matchEndAssertion.group(1))
+                index += 1
 
             result_control[0] = True
             result_control[1] = not isForAll
@@ -184,7 +197,11 @@ class GeneratorBmcOutput(object):
         if self.flag_others_h:
             for header in self.header_others:
                 print(header.rstrip())
-                
+
+        # Adding ASSERT macro
+        print("#define bmc_check(predicate,line)   if(!(predicate)){ "\
+              "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); }")
+
 
         index = 0
         linesCFile = open(self.cprogramfile)
@@ -198,14 +215,17 @@ class GeneratorBmcOutput(object):
             if control_list[0] :
                 # Run the functions line to identify E-ACSL functions
                 while (index+1) != control_list[1] and index < sizelistlines:
-                    listAssertcontrol = self.identifyEacslAssert(list_cfile_lines[index])
+
+                    #listAssertcontrol = self.identifyEacslAssert(list_cfile_lines[index])
+                    listAssertcontrol = self.identifyEacslAssert(list_cfile_lines,index)
 
                     # We have an assertion
                     if listAssertcontrol[0]:
                         # We have a new assertion to add
                         if listAssertcontrol[1]:
                             # TODO: o print deve ser feito de acordo com o tipo da assert
-                            print("assert( "+listAssertcontrol[2]+" );")
+                            #print("assert( "+listAssertcontrol[2]+" );")
+                            print("bmc_check( "+listAssertcontrol[2]+", "+listAssertcontrol[2]+");")
                         # Check if we have a forall assertion
                         elif listAssertcontrol[3]:
                             print("FORALL -- DOING")
