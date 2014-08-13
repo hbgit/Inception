@@ -38,6 +38,7 @@ class GeneratorBmcOutput(object):
         self.cprogramfile = ''
         self.current_funct = ''
         self.dictdatafunctsprog = {} # name_funct -> [line begin, line end]
+        self.list_num_lines_cl = [] # to identify the claims in the ESBMC --show-claims
 
 
         # For C file
@@ -247,6 +248,7 @@ class GeneratorBmcOutput(object):
                         if listAssertcontrol[1]:
                             #print("assert( "+listAssertcontrol[2]+" );")
                             list_newcodetobmc.append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
+                            self.list_num_lines_cl.append(len(list_newcodetobmc))
                             #print("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+");")
 
                         # Check if we have a forall assertion
@@ -276,9 +278,9 @@ class GeneratorBmcOutput(object):
                                     #         pos2addinlist = actualpos + len(listposadded_forall)
                                     #         break
                                     #list_newcodetobmc.append("if in: "+str(actualpos)+"-> "+list_cfile_lines[actualpos]+"\n")
-
                                     list_newcodetobmc.insert(actualposinnewcode, "BMC_CHECK( "+matchIfsInForAll.group(1)+" , "+
                                                              listAssertcontrol[5]+"); \n")
+                                    self.list_num_lines_cl.append(len(list_newcodetobmc))
 
                                     #list_newcodetobmc.insert(pos2addinlist, "NEW FOR ALL \n")
                                     #list_newcodetobmc.insert(actualpos, "NEW FOR ALL \n")
@@ -306,9 +308,25 @@ class GeneratorBmcOutput(object):
                 index += 1 # BUG
 
 
+        # Generate name to save the new code
+        newnametocode = self.cprogramfile.replace(".c","__incep_annot.c")
+
+
         # Print the new code
+        linesCFile = open(newnametocode, "w")
+
         for index, line in enumerate(list_newcodetobmc):
-            print(line,end="")
-                            
+            linesCFile.write(line)
+            #print(line,end="")
+
+        linesCFile.close()
+
+
+        # TODO: generate claims (--show-claims) from ESBMC and idenitify the claims
+        #       that have the same line number in self.list_num_lines_cl
+
+
+        #for i in self.list_num_lines_cl:
+        #    print(i)
         
 
