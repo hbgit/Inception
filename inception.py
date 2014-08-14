@@ -30,13 +30,14 @@ class Inception(object):
     def __init__(self):
         self.ABS_PATH = os.path.dirname(__file__)
         self.cprogram_path = ""
+        self.bmc_tool_path = ""
 
 
     def generate_bmc_output(self, _cprogrampath):
         #print(_cprogrampath)
         insertInstr = generate_esbmc_output.GeneratorBmcOutput()
         insertInstr.readCFile(_cprogrampath)
-        insertInstr.createBmcOutput()
+        insertInstr.createBmcOutput(self.bmc_tool_path)
 
 
 
@@ -69,6 +70,7 @@ if __name__ == "__main__":
 
     if args.setEacslOutput:
         run = Inception()
+        run.bmc_tool_path = "esbmc" #TODO get this info from settings file
         run.cprogram_path = os.path.abspath(args.inputCProgram)
         run.generate_bmc_output(run.cprogram_path)
         # TODO: add a post preprocessing code

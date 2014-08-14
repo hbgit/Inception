@@ -19,6 +19,7 @@ from collections import defaultdict
 
 # From Project
 from modules.utils import datacode
+from modules.bmcs.esbmc import esbmc_option
 
 
 #### Gather the absolute path
@@ -139,6 +140,9 @@ class GeneratorBmcOutput(object):
             get_control_elem = matchFunctAssert.group(1).split(",")
             typeassert = self.identifyTypeACSLAssert(get_control_elem[1])
 
+            #TODO: If it was a RTE assert we need modify the number of line shown by e-acsl, cuz
+            #      always is 0 << we need to improve this
+
             #print(index)
             if self.isAssertForAll(get_control_elem[0]):
                 isForAll = True
@@ -185,11 +189,22 @@ class GeneratorBmcOutput(object):
         return control_list
 
 
+    def generate_list_of_num_assert(self, _list_identifiers):
+        listnumline = []
+        for index, data in enumerate(_list_identifiers):
+            if data:
+                listnumline.append(index+1)
+        return listnumline
 
-    def createBmcOutput(self):
+
+
+    def createBmcOutput(self, _bmc_tool_path):
 
         self.generateDataFunct(self.cprogramfile)
-        list_newcodetobmc = []
+        # 1st list - the code;
+        # 2st list - Identifier if the line is a new assert
+        # 3st list - The number of the line in the original related to the assert pointed out
+        list_newcodetobmc = [[],[],[]]
         listposadded_forall = []
 
         """
@@ -215,11 +230,13 @@ class GeneratorBmcOutput(object):
         #         #list_newcodetobmc.append(header.rstrip())
         #         print(header.rstrip())
 
+
         # Adding ASSERT macro
-        # list_newcodetobmc.append(
-        #     "#define BMC_CHECK(predicate,line)   if(!(predicate)){ "
-        #     "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); } \n"
-        # )
+        list_newcodetobmc[0].append(
+            "#define BMC_CHECK(predicate,line)   if(!(predicate)){ "
+            "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); } \n"
+        )
+        list_newcodetobmc[1].append(False)
 
 
 
@@ -241,14 +258,23 @@ class GeneratorBmcOutput(object):
                     listAssertcontrol = self.identifyEacslAssert(list_cfile_lines,index)
 
                     #list_newcodetobmc.append(str(index)+" << in FUNC \n")
+                    #print(flag_from_forall)
 
                     # We have an assertion
                     if listAssertcontrol[0]:
                         # We have a new assertion to add
                         if listAssertcontrol[1]:
                             #print("assert( "+listAssertcontrol[2]+" );")
-                            list_newcodetobmc.append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
-                            self.list_num_lines_cl.append(len(list_newcodetobmc))
+                            # TODO: if the type of assert is Precondition translate to ASSUME
+                            list_newcodetobmc[0].append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
+                            list_newcodetobmc[1].append(True)
+                            list_newcodetobmc[2].append(listAssertcontrol[5])
+
+                            #print("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
+                            # Check if is comming from forall in this case we plus 2 == 2 new asserts added
+
+                            #to_script = str(len(list_newcodetobmc))+";"+str(listAssertcontrol[5])
+                            #self.list_num_lines_cl.append(to_script)
                             #print("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+");")
 
                         # Check if we have a forall assertion
@@ -256,15 +282,16 @@ class GeneratorBmcOutput(object):
                             # generating assert to forall
                             # From FORALL assertion running the code to bottom-up to find "if(predicate)" x2 and stop
                             # in the while(1)
+                            flag_from_forall = True
 
                             counttostopwhile = 0
                             # Cuz we run in partial and new code that has been generated
-                            actualposinnewcode = len(list_newcodetobmc) - 1
+                            actualposinnewcode = len(list_newcodetobmc[0]) - 1
                             actualposinnewcode -= 1 # before FORALL
 
                             while counttostopwhile < 2:
 
-                                matchIfsInForAll = re.search(r'if[ ]*\((.*)\)', list_newcodetobmc[actualposinnewcode])
+                                matchIfsInForAll = re.search(r'if[ ]*\((.*)\)', list_newcodetobmc[0][actualposinnewcode])
                                 if matchIfsInForAll:
                                     #listposadded_forall.append(actualpos)
                                     counttostopwhile += 1
@@ -278,9 +305,15 @@ class GeneratorBmcOutput(object):
                                     #         pos2addinlist = actualpos + len(listposadded_forall)
                                     #         break
                                     #list_newcodetobmc.append("if in: "+str(actualpos)+"-> "+list_cfile_lines[actualpos]+"\n")
-                                    list_newcodetobmc.insert(actualposinnewcode, "BMC_CHECK( "+matchIfsInForAll.group(1)+" , "+
-                                                             listAssertcontrol[5]+"); \n")
-                                    self.list_num_lines_cl.append(len(list_newcodetobmc))
+                                    list_newcodetobmc[0].insert(actualposinnewcode, "BMC_CHECK( " + matchIfsInForAll.group(1)
+                                                                + " , " + listAssertcontrol[5] + "); \n")
+                                    list_newcodetobmc[1].insert(actualposinnewcode, True)
+                                    list_newcodetobmc[2].append(listAssertcontrol[5])
+
+                                    #print(">>>>>", actualposinnewcode)
+
+                                    #to_script = str(len(list_newcodetobmc))+";"+str(listAssertcontrol[5])
+                                    #self.list_num_lines_cl.append(to_script)
 
                                     #list_newcodetobmc.insert(pos2addinlist, "NEW FOR ALL \n")
                                     #list_newcodetobmc.insert(actualpos, "NEW FOR ALL \n")
@@ -294,7 +327,8 @@ class GeneratorBmcOutput(object):
 
 
                     #list_newcodetobmc.append(str(index)+" << in FUNC "+list_cfile_lines[index])
-                    list_newcodetobmc.append(list_cfile_lines[index])
+                    list_newcodetobmc[0].append(list_cfile_lines[index])
+                    list_newcodetobmc[1].append(False)
                     #print(list_cfile_lines[index],end="")
                     index += 1
 
@@ -303,7 +337,8 @@ class GeneratorBmcOutput(object):
             if index < sizelistlines:
                 #list_newcodetobmc.append(str(index)+" << GLOBAL \n")
                 #list_newcodetobmc.append(str(index)+" << GLOBAL "+list_cfile_lines[index])
-                list_newcodetobmc.append(list_cfile_lines[index])
+                list_newcodetobmc[0].append(list_cfile_lines[index])
+                list_newcodetobmc[1].append(False)
                 #print(list_cfile_lines[index],end="")
                 index += 1 # BUG
 
@@ -315,15 +350,28 @@ class GeneratorBmcOutput(object):
         # Print the new code
         linesCFile = open(newnametocode, "w")
 
-        for index, line in enumerate(list_newcodetobmc):
+        for index, line in enumerate(list_newcodetobmc[0]):
             linesCFile.write(line)
             #print(line,end="")
 
         linesCFile.close()
 
+        #STOP: Create a method to identify the lines where we added an assertion in list_newcodetobmc[1]
+        listlinenumassert = self.generate_list_of_num_assert(list_newcodetobmc[1])
 
-        # TODO: generate claims (--show-claims) from ESBMC and idenitify the claims
-        #       that have the same line number in self.list_num_lines_cl
+        # Generating the script to check the assert added to BMC
+        #1) --show-claims
+        runbmc = esbmc_option.EsbmcRun()
+        listofbmcclaims = runbmc.generate_claims(newnametocode,_bmc_tool_path)
+
+        #2) identify claims based on self.list_num_lines_cl[0]
+        # Generating a list only with line num from assert added
+        listbmcnumcl = runbmc.get_claims_from_lines(listlinenumassert,listofbmcclaims)
+
+        #3) generate script based on result of step 2
+        runbmc.write_esbmc_script(newnametocode,listbmcnumcl,list_newcodetobmc[2])
+
+
 
 
         #for i in self.list_num_lines_cl:
