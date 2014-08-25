@@ -40,6 +40,7 @@ class GeneratorBmcOutput(object):
         self.current_funct = ''
         self.dictdatafunctsprog = {} # name_funct -> [line begin, line end]
         self.list_num_lines_cl = [] # to identify the claims in the ESBMC --show-claims
+        self.listlinesnotwrite = []
 
 
         # For C file
@@ -134,6 +135,7 @@ class GeneratorBmcOutput(object):
         result_control = [False,False,"","",False,0]
         matchFunctAssert = re.search(r'e_acsl_assert\((.*)', _linesprogram[index])
         if matchFunctAssert:
+            self.listlinesnotwrite.append(index)
             isForAll = False
             newline = ""
 
@@ -231,11 +233,15 @@ class GeneratorBmcOutput(object):
         #         print(header.rstrip())
 
 
-        # Adding ASSERT macro
-        list_newcodetobmc[0].append(
-            "#define BMC_CHECK(predicate,line)   if(!(predicate)){ "
-            "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); } \n"
-        )
+        # # Adding ASSERT macro
+        # list_newcodetobmc[0].append(
+        #     "#define BMC_CHECK(predicate,line)   if(!(predicate)){ "
+        #     "printf(\"Invariant Violated in line: %d \\n\", line); assert(0); } \n"
+        # )
+        # list_newcodetobmc[1].append(False)
+
+        # Comments in the top of the file
+        list_newcodetobmc[0].append("/* Updated by Inception */ \n")
         list_newcodetobmc[1].append(False)
 
 
@@ -266,7 +272,8 @@ class GeneratorBmcOutput(object):
                         if listAssertcontrol[1]:
                             #print("assert( "+listAssertcontrol[2]+" );")
                             # TODO: if the type of assert is Precondition translate to ASSUME
-                            list_newcodetobmc[0].append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
+                            # list_newcodetobmc[0].append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
+                            list_newcodetobmc[0].append("assert( " + listAssertcontrol[2] + "); \n")
                             list_newcodetobmc[1].append(True)
                             list_newcodetobmc[2].append(listAssertcontrol[5])
 
@@ -305,8 +312,9 @@ class GeneratorBmcOutput(object):
                                     #         pos2addinlist = actualpos + len(listposadded_forall)
                                     #         break
                                     #list_newcodetobmc.append("if in: "+str(actualpos)+"-> "+list_cfile_lines[actualpos]+"\n")
-                                    list_newcodetobmc[0].insert(actualposinnewcode, "BMC_CHECK( " + matchIfsInForAll.group(1)
-                                                                + " , " + listAssertcontrol[5] + "); \n")
+                                    # list_newcodetobmc[0].insert(actualposinnewcode, "BMC_CHECK( " + matchIfsInForAll.group(1)
+                                    #                             + " , " + listAssertcontrol[5] + "); \n")
+                                    list_newcodetobmc[0].insert(actualposinnewcode, "assert( " + matchIfsInForAll.group(1) + "); \n")
                                     list_newcodetobmc[1].insert(actualposinnewcode, True)
                                     list_newcodetobmc[2].append(listAssertcontrol[5])
 
@@ -327,10 +335,18 @@ class GeneratorBmcOutput(object):
 
 
                     #list_newcodetobmc.append(str(index)+" << in FUNC "+list_cfile_lines[index])
-                    list_newcodetobmc[0].append(list_cfile_lines[index])
-                    list_newcodetobmc[1].append(False)
-                    #print(list_cfile_lines[index],end="")
-                    index += 1
+                    if index in self.listlinesnotwrite:
+                        flagstopendline = False
+                        while not flagstopendline:
+                            matchendline = re.search(r'[;]$', list_cfile_lines[index].strip())
+                            if matchendline:
+                                flagstopendline = True
+                                #list_newcodetobmc[0].append(">>>"+list_cfile_lines[index])
+                            index += 1
+                    else:
+                        list_newcodetobmc[0].append(list_cfile_lines[index])
+                        list_newcodetobmc[1].append(False)
+                        index += 1
 
 
             # Print lines of code outside of the functions
