@@ -271,9 +271,13 @@ class GeneratorBmcOutput(object):
                         # We have a new assertion to add
                         if listAssertcontrol[1]:
                             #print("assert( "+listAssertcontrol[2]+" );")
-                            # TODO: if the type of assert is Precondition translate to ASSUME
+                            # if the type of assert is Precondition translate to ASSUME
                             # list_newcodetobmc[0].append("BMC_CHECK( "+listAssertcontrol[2]+", "+listAssertcontrol[5]+"); \n")
-                            list_newcodetobmc[0].append("assert( " + listAssertcontrol[2] + "); \n")
+                            #Precondition
+                            if listAssertcontrol[3] == "Precondition":
+                                list_newcodetobmc[0].append("__ESBMC_assume( " + listAssertcontrol[2] + "); \n")
+                            else:
+                                list_newcodetobmc[0].append("assert( " + listAssertcontrol[2] + "); \n")
                             list_newcodetobmc[1].append(True)
                             list_newcodetobmc[2].append(listAssertcontrol[5])
 
@@ -314,7 +318,11 @@ class GeneratorBmcOutput(object):
                                     #list_newcodetobmc.append("if in: "+str(actualpos)+"-> "+list_cfile_lines[actualpos]+"\n")
                                     # list_newcodetobmc[0].insert(actualposinnewcode, "BMC_CHECK( " + matchIfsInForAll.group(1)
                                     #                             + " , " + listAssertcontrol[5] + "); \n")
-                                    list_newcodetobmc[0].insert(actualposinnewcode, "assert( " + matchIfsInForAll.group(1) + "); \n")
+                                    if listAssertcontrol[3] == "Precondition":
+                                        list_newcodetobmc[0].append("__ESBMC_assume( " + matchIfsInForAll.group(1) + "); \n")
+                                    else:
+                                        list_newcodetobmc[0].append("assert( " + matchIfsInForAll.group(1) + "); \n")
+                                    #list_newcodetobmc[0].insert(actualposinnewcode, "assert( " + matchIfsInForAll.group(1) + "); \n")
                                     list_newcodetobmc[1].insert(actualposinnewcode, True)
                                     list_newcodetobmc[2].append(listAssertcontrol[5])
 

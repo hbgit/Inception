@@ -131,16 +131,14 @@ int handle_buffer(void)
     int __e_acsl_i;
 assert( i < 10); 
 assert( 0 <= i); 
-assert( i == buffer[i]); 
-assert( buffer == (void *)0); 
+__ESBMC_assume( i == buffer[i]); 
+__ESBMC_assume( buffer == (void *)0); 
     __e_acsl_forall = 1;
     __e_acsl_i = 0;
     while (1) {
-assert( __e_acsl_i <= 9); 
       if (__e_acsl_i <= 9) ; else break;
 assert( __e_acsl_i < 10); 
 assert( 0 <= __e_acsl_i); 
-assert( buffer[__e_acsl_i] == 0); 
       if (buffer[__e_acsl_i] == 0) ;
       else {
         __e_acsl_forall = 0;
@@ -149,6 +147,8 @@ assert( buffer[__e_acsl_i] == 0);
       __e_acsl_i ++;
     }
     e_acsl_end_loop1: ;
+__ESBMC_assume( buffer[__e_acsl_i] == 0); 
+__ESBMC_assume( __e_acsl_i <= 9); 
     __e_acsl_at_6 = i;
 assert( (long long)i - (long long)1 < (long long)10); 
 assert( 0LL <= (long long)i - (long long)1); 
@@ -167,11 +167,9 @@ assert( 0LL <= (long long)i - (long long)1);
     __e_acsl_forall_2 = 1;
     __e_acsl_k = 0;
     while (1) {
-assert( __e_acsl_k <= 9); 
       if (__e_acsl_k <= 9) ; else break;
 assert( __e_acsl_k < 10); 
 assert( 0 <= __e_acsl_k); 
-assert( buffer[__e_acsl_k] != __e_acsl_at); 
       if (buffer[__e_acsl_k] != __e_acsl_at) ;
       else {
         __e_acsl_forall_2 = 0;
@@ -180,14 +178,14 @@ assert( buffer[__e_acsl_k] != __e_acsl_at);
       __e_acsl_k ++;
     }
     e_acsl_end_loop2: ;
+assert( buffer[__e_acsl_k] != __e_acsl_at); 
+assert( __e_acsl_k <= 9); 
     __e_acsl_forall_3 = 1;
     __e_acsl_j = 0;
     while (1) {
-assert( __e_acsl_j <= 9); 
       if (__e_acsl_j <= 9) ; else break;
 assert( __e_acsl_j < 10); 
 assert( 0 <= __e_acsl_j); 
-assert( buffer[__e_acsl_j] == i); 
       if (buffer[__e_acsl_j] == i) ;
       else {
         __e_acsl_forall_3 = 0;
@@ -196,6 +194,8 @@ assert( buffer[__e_acsl_j] == i);
       __e_acsl_j ++;
     }
     e_acsl_end_loop3: ;
+assert( buffer[__e_acsl_j] == i); 
+assert( __e_acsl_j <= 9); 
     /*@ loop invariant ∀ int j; 0 ≤ j ∧ j ≤ 9 ⇒ buffer[j] ≡ i;
         loop invariant
           ¬(∀ int k; 0 ≤ k ∧ k ≤ 9 ⇒ buffer[k] ≢ \at(i,Pre));
@@ -211,11 +211,9 @@ assert( buffer[__e_acsl_j] == i);
         __e_acsl_forall_4 = 1;
         __e_acsl_j_2 = 0;
         while (1) {
-assert( __e_acsl_j_2 <= 9); 
           if (__e_acsl_j_2 <= 9) ; else break;
 assert( __e_acsl_j_2 < 10); 
 assert( 0 <= __e_acsl_j_2); 
-assert( buffer[__e_acsl_j_2] == i); 
           if (buffer[__e_acsl_j_2] == i) ;
           else {
             __e_acsl_forall_4 = 0;
@@ -224,14 +222,14 @@ assert( buffer[__e_acsl_j_2] == i);
           __e_acsl_j_2 ++;
         }
         e_acsl_end_loop4: ;
+assert( buffer[__e_acsl_j_2] == i); 
+assert( __e_acsl_j_2 <= 9); 
         __e_acsl_forall_5 = 1;
         __e_acsl_k_2 = 0;
         while (1) {
-assert( __e_acsl_k_2 <= 9); 
           if (__e_acsl_k_2 <= 9) ; else break;
 assert( __e_acsl_k_2 < 10); 
 assert( 0 <= __e_acsl_k_2); 
-assert( buffer[__e_acsl_k_2] != __e_acsl_at_2); 
           if (buffer[__e_acsl_k_2] != __e_acsl_at_2) ;
           else {
             __e_acsl_forall_5 = 0;
@@ -240,6 +238,8 @@ assert( buffer[__e_acsl_k_2] != __e_acsl_at_2);
           __e_acsl_k_2 ++;
         }
         e_acsl_end_loop5: ;
+assert( buffer[__e_acsl_k_2] != __e_acsl_at_2); 
+assert( __e_acsl_k_2 <= 9); 
       }
     }
   }
