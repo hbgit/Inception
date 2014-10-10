@@ -1,0 +1,138 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..foo():::ENTER
+  ppt-type enter
+  variable arr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable arr[..]
+    var-kind array
+    enclosing-var arr
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable N
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..foo():::EXIT0
+  ppt-type subexit
+  variable arr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable arr[..]
+    var-kind array
+    enclosing-var arr
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable N
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable \\result
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable arr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable arr[..]
+    var-kind array
+    enclosing-var arr
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable arr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable arr[..]
+    var-kind array
+    enclosing-var arr
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable \\result
+    var-kind variable
+    rep-type int
+    dec-type int
+
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+
+..main():::ENTER
+this_invocation_nonce
+0
+arr
+0x601040
+1
+arr[..]
+[ 2 3 1 2 2 ]
+1
+
+..foo():::ENTER
+this_invocation_nonce
+1
+arr
+0x601040
+1
+arr[..]
+[ 2 3 1 2 2 ]
+1
+N
+5
+1
+
+..foo():::EXIT0
+this_invocation_nonce
+1
+arr
+0x601040
+1
+arr[..]
+[ 0 3 2 6 8 ]
+1
+N
+5
+1
+\\result
+0
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+arr
+0x601040
+1
+arr[..]
+[ 0 3 2 6 8 ]
+1
+\\result
+0
+1
