@@ -11,6 +11,7 @@ Method Goal:
 		ANS: In each control flow struture, but we should avoid to add
 		asserts(0) in the last part of control components (if,while,...)
 		when the line before the actual line is not a assignment or Decl.
+		In loop structures the assert shoul be added after the loop.
 		
 	- FOR FUTURE:
 		ANS: We can adopt http://pathcrawler-online.com to run more test, if the 
