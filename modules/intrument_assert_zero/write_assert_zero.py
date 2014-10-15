@@ -447,7 +447,7 @@ class ParseC2Ast2C(object):
         self.ast_gen = pycparser.c_generator
         self.current_funct = ''          
         self.current_compund_func = pycparser.c_ast.Compound
-        self.list_flow_program = [If,While,For,DoWhile,Switch,Case]
+        self.list_flow_program = [If,While,For,DoWhile,Switch,Case,Default]
         self.flag_is_main = False
         self.actual_index_ast_node = 0
         self.nextLineNumEgual = []
@@ -627,20 +627,56 @@ class ParseC2Ast2C(object):
                 
                 
             elif get_flow_type == Case:
-                s = 'case ' + generator_code.visit(line.expr) + ':\n'
+                s = 'case ' + generator_code.visit(line.expr) + ': '
                 print(s)
+                # Checking if in the case has not a break call
+                flagbreak = False
                 for stmt in line.stmts:
+                    if type(stmt) == Break:
+                        flagbreak = True
+
+                for stmt in line.stmts:
+                    if type(stmt) == Break:
+                        # Write assertion zero
+                        print("assert(0); //by INCEPECTION")
                     self.expandFunction(stmt)
+
+                if not flagbreak and len(line.stmts) > 0:
+                    print("assert(0); //by INCEPECTION")
+
+            elif get_flow_type == Default:
+                h = 'default: '
+                print(h)
+                s = ''
+
+                # Checking if in the case has not a break call
+                flagbreak = False
+                for stmt in line.stmts:
+                    if type(stmt) == Break:
+                        flagbreak = True
+
+                for stmt in line.stmts:
+                    if type(stmt) == Break:
+                        # Write assertion zero
+                        print("assert(0); //by INCEPECTION")
+                    #s += generator_code._generate_stmt(stmt, add_indent=True)
+                    self.expandFunction(stmt)
+
+                if not flagbreak  and len(line.stmts) > 0:
+                    print("assert(0); //by INCEPECTION")
+                #return s
+                #print(s)
             
             
         else:
             # >> Body of the flow program
             #print("\t\t BF_Bflow: ",line.coord) # DEBUG
             if type(line) == FuncCall:
-                #print("-----------", line.name.name)
                 if line.name.name in ['abort','exit']:
-                    # Write leak assertion 
-                    self.write_leak_assert(line)
+                    # Write assertion zero
+                    print("assert(0); //by INCEPECTION")
+
+            # TODO: Handle the  return in the main function
 
             if len(self.nextLineNumEgual) > 1:
                 tmp_k_1 = 0

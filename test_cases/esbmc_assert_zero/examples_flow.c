@@ -17,6 +17,7 @@ main(){
 	if(l == 0){
 		r = 3;
 		l = 2;
+		exit();
 		k = 5;
 	}
 
@@ -53,4 +54,78 @@ main(){
         even though the condition is false */
         printf( "Hello, world!\n" );
     } while ( x1 != 0 );
+
+
+    /**
+    * ==> Loops aninhados
+    **/
+    int w = 0;
+    for(w=0;w<100;w++){
+        for(w=0;w<100;w++){
+            for(w=0;w<100;w++){
+                w = 1;
+            }
+        }
+    }
+
+    /**
+    * ==> Condition struture (IF, ELSE) inside Loop
+    **/
+    for(w=0;w<100;w++){
+        if(w){
+            w = 1;
+        }else{
+            w = 0;
+        }
+    }
+
+    for(w=0;w<100;w++){
+        for(w=0;w<100;w++){
+            if(w){
+                w = 1;
+            }
+        }
+    }
+
+
+
+    // switch with break
+    int qw = 5;
+    switch( qw ){
+        case 1:
+            qw = 1;
+            break;
+        case 2:
+            qw = 2;
+            break;
+        case 3:
+            qw = 3;
+            break;
+        case 4:
+            qw = 4;
+            break;
+        case 5:
+            qw = 5;
+            break;
+        default:
+            qw = 0;
+            break;
+    }
+
+
+    // switch with NO breaks
+    int qw = 5;
+    switch( qw ){
+        case 1:
+            qw = 1;
+        case 2:
+            qw = 2;
+        case 3:
+            qw = 3;
+        case 4:
+        case 5:
+            qw = 5;
+        default:
+            qw = 0;
+    }
 }

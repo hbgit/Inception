@@ -25,3 +25,12 @@ Preliminary tests to build the method:
 
 (1) Create test cases (with asserts(0)) to take the MCDC coverage condition
 
+
+
+
+========================================== DOING ==================================================
+>[write_assert_zero.py] Added support to switch case
+
+
+>[write_assert_zero.py] TODO: Adding support to nested loops
+
