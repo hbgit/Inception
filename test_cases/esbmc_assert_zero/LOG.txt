@@ -30,7 +30,8 @@ Preliminary tests to build the method:
 
 ========================================== DOING ==================================================
 >[write_assert_zero.py] Added support to switch case
+>[write_assert_zero.py] Added support to nested loops
 
-
->[write_assert_zero.py] TODO: Adding support to nested loops
+>[write_esbmc_script_assert_zero.py] Created script to verify the program instrumented with ESBMC and save the counterexamples
+    :: Insight: Some flow could not be explored cuz some fixed assignment
 
