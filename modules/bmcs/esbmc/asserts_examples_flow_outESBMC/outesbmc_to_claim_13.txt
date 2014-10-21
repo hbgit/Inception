@@ -1,0 +1,376 @@
+file asserts_examples_flow.c: Parsing
+Converting
+Type-checking asserts_examples_flow
+Generating GOTO Program
+Pointer Analysis
+Adding Pointer Checks
+Starting Bounded Model Checking
+Unwinding loop 0 iteration 1 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 2 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 3 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 4 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 5 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 6 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 7 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 8 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 9 file asserts_examples_flow.c line 26 function main
+Unwinding loop 0 iteration 10 file asserts_examples_flow.c line 26 function main
+Unwinding loop 1 iteration 1 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 2 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 3 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 4 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 5 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 6 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 7 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 8 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 9 file asserts_examples_flow.c line 32 function main
+Unwinding loop 1 iteration 10 file asserts_examples_flow.c line 32 function main
+Unwinding loop 3 iteration 1 file asserts_examples_flow.c line 45 function main
+Unwinding loop 3 iteration 2 file asserts_examples_flow.c line 45 function main
+Unwinding loop 3 iteration 3 file asserts_examples_flow.c line 45 function main
+Unwinding loop 4 iteration 1 file asserts_examples_flow.c line 44 function main
+Unwinding loop 5 iteration 1 file asserts_examples_flow.c line 43 function main
+Unwinding loop 6 iteration 1 file asserts_examples_flow.c line 53 function main
+Unwinding loop 6 iteration 2 file asserts_examples_flow.c line 53 function main
+Unwinding loop 6 iteration 3 file asserts_examples_flow.c line 53 function main
+Unwinding loop 7 iteration 1 file asserts_examples_flow.c line 64 function main
+Unwinding loop 7 iteration 2 file asserts_examples_flow.c line 64 function main
+Unwinding loop 7 iteration 3 file asserts_examples_flow.c line 64 function main
+Unwinding loop 8 iteration 1 file asserts_examples_flow.c line 63 function main
+size of program expression: 245 assignments
+Generated 1 VCC(s), 1 remaining after simplification
+Encoding remaining VCC(s) using integer/real arithmetic
+Solving with SMT Solver Z3 v2.19
+Runtime decision procedure: 0.006s
+Building error trace
+
+Counterexample:
+
+State 1 file /usr/include/stdio.h line 168 thread 0
+----------------------------------------------------
+  stdin=(assignment removed)
+
+State 2 file /usr/include/stdio.h line 169 thread 0
+----------------------------------------------------
+  stdout=(assignment removed)
+
+State 3 file /usr/include/stdio.h line 170 thread 0
+----------------------------------------------------
+  stderr=(assignment removed)
+
+State 4 file <built-in> line 12 thread 0
+----------------------------------------------------
+  __ESBMC_alloc=(assignment removed)
+
+State 5 file <built-in> line 13 thread 0
+----------------------------------------------------
+  __ESBMC_deallocated=(assignment removed)
+
+State 6 file <built-in> line 14 thread 0
+----------------------------------------------------
+  __ESBMC_is_dynamic=(assignment removed)
+
+State 7 file <built-in> line 15 thread 0
+----------------------------------------------------
+  __ESBMC_alloc_size=(assignment removed)
+
+State 8 file <built-in> line 21 thread 0
+----------------------------------------------------
+  __ESBMC_rounding_mode=0 (00000000000000000000000000000000)
+
+State 10 file asserts_examples_flow.c line 9 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::r=2 (00000000000000000000000000000010)
+
+State 13 file asserts_examples_flow.c line 22 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::r=12 (00000000000000000000000000001100)
+
+State 14 file asserts_examples_flow.c line 25 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=0 (00000000000000000000000000000000)
+0
+
+
+State 17 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=1 (00000000000000000000000000000001)
+1
+
+
+State 21 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=2 (00000000000000000000000000000010)
+2
+
+
+State 25 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=3 (00000000000000000000000000000011)
+3
+
+
+State 29 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=4 (00000000000000000000000000000100)
+4
+
+
+State 33 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=5 (00000000000000000000000000000101)
+5
+
+
+State 37 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=6 (00000000000000000000000000000110)
+6
+
+
+State 41 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=7 (00000000000000000000000000000111)
+7
+
+
+State 45 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=8 (00000000000000000000000000001000)
+8
+
+
+State 49 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=9 (00000000000000000000000000001001)
+9
+
+
+State 53 file asserts_examples_flow.c line 28 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x=10 (00000000000000000000000000001010)
+
+State 56 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=0 (00000000000000000000000000000000)
+0
+
+
+State 59  thread 0
+----------------------------------------------------
+  c::main::::tmp=0 (00000000000000000000000000000000)
+
+State 60 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=1 (00000000000000000000000000000001)
+1
+
+
+State 64  thread 0
+----------------------------------------------------
+  c::main::::tmp=1 (00000000000000000000000000000001)
+
+State 65 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=2 (00000000000000000000000000000010)
+2
+
+
+State 69  thread 0
+----------------------------------------------------
+  c::main::::tmp=2 (00000000000000000000000000000010)
+
+State 70 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=3 (00000000000000000000000000000011)
+3
+
+
+State 74  thread 0
+----------------------------------------------------
+  c::main::::tmp=3 (00000000000000000000000000000011)
+
+State 75 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=4 (00000000000000000000000000000100)
+4
+
+
+State 79  thread 0
+----------------------------------------------------
+  c::main::::tmp=4 (00000000000000000000000000000100)
+
+State 80 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=5 (00000000000000000000000000000101)
+5
+
+
+State 84  thread 0
+----------------------------------------------------
+  c::main::::tmp=5 (00000000000000000000000000000101)
+
+State 85 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=6 (00000000000000000000000000000110)
+6
+
+
+State 89  thread 0
+----------------------------------------------------
+  c::main::::tmp=6 (00000000000000000000000000000110)
+
+State 90 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=7 (00000000000000000000000000000111)
+7
+
+
+State 94  thread 0
+----------------------------------------------------
+  c::main::::tmp=7 (00000000000000000000000000000111)
+
+State 95 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=8 (00000000000000000000000000001000)
+8
+
+
+State 99  thread 0
+----------------------------------------------------
+  c::main::::tmp=8 (00000000000000000000000000001000)
+
+State 100 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=9 (00000000000000000000000000001001)
+9
+
+
+State 104  thread 0
+----------------------------------------------------
+  c::main::::tmp=9 (00000000000000000000000000001001)
+
+State 105 file asserts_examples_flow.c line 32 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::k1=10 (00000000000000000000000000001010)
+
+State 108 file asserts_examples_flow.c line 37 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=0 (00000000000000000000000000000000)
+Hello, world!
+
+
+State 111 file asserts_examples_flow.c line 42 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=0 (00000000000000000000000000000000)
+
+State 112 file asserts_examples_flow.c line 43 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=0 (00000000000000000000000000000000)
+
+State 114 file asserts_examples_flow.c line 44 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=0 (00000000000000000000000000000000)
+
+State 116 file asserts_examples_flow.c line 45 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=0 (00000000000000000000000000000000)
+
+State 118 file asserts_examples_flow.c line 46 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=1 (00000000000000000000000000000001)
+
+State 119  thread 0
+----------------------------------------------------
+  c::main::::tmp1=0 (00000000000000000000000000000000)
+
+State 120 file asserts_examples_flow.c line 45 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=1 (00000000000000000000000000000001)
+
+State 123 file asserts_examples_flow.c line 46 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=1 (00000000000000000000000000000001)
+
+State 124  thread 0
+----------------------------------------------------
+  c::main::::tmp1=1 (00000000000000000000000000000001)
+
+State 125 file asserts_examples_flow.c line 45 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=2 (00000000000000000000000000000010)
+
+State 128 file asserts_examples_flow.c line 46 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=1 (00000000000000000000000000000001)
+
+State 129  thread 0
+----------------------------------------------------
+  c::main::::tmp1=2 (00000000000000000000000000000010)
+
+State 130 file asserts_examples_flow.c line 45 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=3 (00000000000000000000000000000011)
+
+State 133  thread 0
+----------------------------------------------------
+  c::main::::tmp0=3 (00000000000000000000000000000011)
+
+State 134 file asserts_examples_flow.c line 44 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=4 (00000000000000000000000000000100)
+
+State 137  thread 0
+----------------------------------------------------
+  c::main::::tmp=4 (00000000000000000000000000000100)
+
+State 138 file asserts_examples_flow.c line 43 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=5 (00000000000000000000000000000101)
+
+State 141 file asserts_examples_flow.c line 53 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=0 (00000000000000000000000000000000)
+
+State 144 file asserts_examples_flow.c line 58 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=0 (00000000000000000000000000000000)
+
+State 145  thread 0
+----------------------------------------------------
+  c::main::::tmp5=0 (00000000000000000000000000000000)
+
+State 146 file asserts_examples_flow.c line 53 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=1 (00000000000000000000000000000001)
+
+State 150 file asserts_examples_flow.c line 55 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=1 (00000000000000000000000000000001)
+
+State 152  thread 0
+----------------------------------------------------
+  c::main::::tmp5=1 (00000000000000000000000000000001)
+
+State 153 file asserts_examples_flow.c line 53 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=2 (00000000000000000000000000000010)
+
+State 157 file asserts_examples_flow.c line 55 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::x1=1 (00000000000000000000000000000001)
+
+State 159  thread 0
+----------------------------------------------------
+  c::main::::tmp5=2 (00000000000000000000000000000010)
+
+State 160 file asserts_examples_flow.c line 53 function main thread 0
+----------------------------------------------------
+  asserts_examples_flow::main::1::w=3 (00000000000000000000000000000011)
+
+Violated property:
+  file asserts_examples_flow.c line 62 function main
+  assertion 0
+  FALSE
+
+VERIFICATION FAILED
